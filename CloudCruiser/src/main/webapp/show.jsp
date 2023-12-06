@@ -7,16 +7,16 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Insert title here</title>
+			<title>Insert title here</title>
 	</head>
 	<body>
 		<% try {
 	
-			//Get the database connection
-			ApplicationDB db = new ApplicationDB();	
-			Connection con = db.getConnection();		
+			//Get the database connection.
+			ApplicationDB db = new ApplicationDB();
+			Connection con = db.getConnection();
 
-			//Create a SQL statement
+			//Create a SQL statement.
 			Statement stmt = con.createStatement();
 			//Get the selected radio button from the index.jsp
 			String entity = request.getParameter("command");
@@ -39,7 +39,7 @@
 			</td>
 		</tr>
 			<%
-			//parse out the results
+			//parse out the results.
 			while (result.next()) { %>
 				<tr>    
 					<td><%= result.getString("name") %></td>

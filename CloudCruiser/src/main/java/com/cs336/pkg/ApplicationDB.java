@@ -6,14 +6,12 @@ import java.sql.SQLException;
 
 public class ApplicationDB
 {
-	public ApplicationDB()
-	{
+	public ApplicationDB() {
 	}
 
-	public Connection getConnection()
-	{
-		//Create a connection string.
-		String connectionUrl = "jdbc:mysql://localhost:3306/BarBeerDrinkerSample";
+	public Connection getConnection() {
+		//Create a connection string to local database.
+		String connectionUrl = "jdbc:mysql://localhost:3306/cloudcruiserdatabase?useSSL=false";
 		Connection connection = null;
 		
 		try {
@@ -28,8 +26,8 @@ public class ApplicationDB
 			e.printStackTrace();
 		}
 		try {
-			//Create a connection to your DB.
-			connection = DriverManager.getConnection(connectionUrl,"root", "root");
+			//Create a connection to local database with appropriate username and password.
+			connection = DriverManager.getConnection(connectionUrl,"root", "MYSQL#data14");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -37,12 +35,10 @@ public class ApplicationDB
 		return connection;
 	}
 	
-	public void closeConnection(Connection connection)
-	{
+	public void closeConnection(Connection connection) {
 		try {
 			connection.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -51,7 +47,7 @@ public class ApplicationDB
 		ApplicationDB dao = new ApplicationDB();
 		Connection connection = dao.getConnection();
 		
-		System.out.println(connection);		
+		System.out.println(connection);
 		dao.closeConnection(connection);
 	}
 }
