@@ -49,7 +49,7 @@
             preparedStatement.setString(4, lastName);
         }
 
-        // Execute insert query.
+        // Execute query.
         int rowsAffected = preparedStatement.executeUpdate();
 
         // Check if insertion was successful.

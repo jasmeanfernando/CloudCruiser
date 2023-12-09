@@ -43,7 +43,7 @@
 		preparedStatement = con.prepareStatement(query);
         preparedStatement.setString(1, accountID);
 
-        // Execute the query.
+        // Execute query.
         ResultSet resultSet = preparedStatement.executeQuery();
         
      	// Check if username exists.
