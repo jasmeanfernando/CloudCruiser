@@ -29,7 +29,7 @@
 		String min_price = request.getParameter("filterby_min_price");
 		String max_price = request.getParameter("filterby_max_price");
 		String airline = request.getParameter("filterby_airline");
-		String layovers = request.getParameter("filterby_layover");
+		String layovers = request.getParameter("filterby_layovers");
 		String departure_time = request.getParameter("filterby_departure_time");
 		String arrival_time = request.getParameter("filterby_arrival_time");
 		
@@ -186,6 +186,8 @@
 		out.print("<p>Timeout...</p>");
 	}
 	%>
+	<p><a href="BrowseFlights.jsp">Back to Flights</a></p>
+	<p><a href="Logout.jsp">Log Out</a></p>
 <% } %>
 	</body>
 </html>

@@ -157,11 +157,11 @@
 	
 	<h2>Filter By...</h2>
 	<form method="get" action="FlightFilter.jsp">
-		Choose price range (Input only an integer or decimal).
+		Choose price range.
 		<br>
-		<input type="text" name="filterby_min_price" placeholder="MINIMUM"/>
+		<input type="text" name="filterby_min_price" placeholder="Min Price"/>
 		<br>
-		<input type="text" name="filterby_max_price" placeholder="MAXIMUM"/>
+		<input type="text" name="filterby_max_price" placeholder="Max Price"/>
 		<br><br>
 		
 		Choose an airline.
@@ -175,9 +175,9 @@
 		</select>
 		<br><br>
 		
-		Choose number of layovers (Input only an integer).
+		Choose number of layovers.
 		<br>
-		<input type="text" name="filterby_layover" placeholder="0"/>
+		<input type="text" name="filterby_layovers" placeholder="0"/>
 		<br><br>
 		
 		Choose departure time (Input in military time).
@@ -194,46 +194,41 @@
 	</form>
 	
 	<h2>Search By...</h2> 
-	<p> Fill in the desired information. </p>
 	<form method = "post" action ="FlightSearch.jsp">
-		Choose two airports.
+		Choose two airports codes.
 		<br>
-		<input type="text" name="dep_airport" placeholder="Departure Airport"/> 
+		<input type="text" name="searchby_departure_airport" placeholder="Departure Airport"/> 
 		<br>
-		<input type="text" name="arr_airport" placeholder="Arrival Airport"/> 
+		<input type="text" name="searchby_arrival_airport" placeholder="Arrival Airport"/> 
 		<br><br>
 		
-		Choose desired trip type.
+		Choose trip type.
 		<br>
-		<input type="radio" name="trip_type" value="roundtrip" required/> Round Trip
+		<input type="radio" name="searchby_triptype" value="oneway" required/> One-Way Trip
 		<br>
-		<input type="radio" name="trip_type" value="oneway" required/> One-Way Trip
+		<input type="radio" name="searchby_triptype" value="roundtrip" required/> Round Trip
 		<br>
-		<input type="radio" name="trip_type" value="either" required/> Any Trip
+		<input type="radio" name="searchby_triptype" value="either" required/> Any Trip
 		<br><br>
 		
-		Choose date.
+		Choose date(s).
 		<br>
-		<input type="radio" name="specific_date" value="inflex" required/> Enter specific date.
-		<br>
-		<input type="text" name="specific_date_start" placeholder="YYYY-MM-DD"/>
-		<br>
-		<input type="radio" name="specific_dates" value="inflex" required/> Enter specific dates.
-		<br>
-		<input type="text" name="specific_dates_start" placeholder="YYYY-MM-DD"/> to <input type="text" name="specific_dates_end" placeholder="YYYY-MM-DD"/>
-		<br>
-		<input type="radio" name="flex_dates" value="flex" required/> Enter flexible dates (+/-3 days).
-		<br>
-		<input type="text" name="flex_dates_start" placeholder="YYYY-MM-DD"/> to <input type="text" name="flex_dates_end" placeholder="YYYY-MM-DD"/>
-		<br><br>
+		<input type="radio" name="searchby_date" value="1inflex" required/> Enter specific date.
+		<br><input type="text" name="specific_date_start" placeholder="YYYY-MM-DD"/>
 		
-		Indicate layover preference (number of preferable stops).
 		<br>
-		<input type="text" name="num_stops" placeholder="Integer"/>
+		<input type="radio" name="searchby_date" value="2inflex" required/> Enter specific depart-by and arrive-by dates.
+		<br><input type="text" name="specific_dates_start" placeholder="YYYY-MM-DD"/> to <input type="text" name="specific_dates_end" placeholder="YYYY-MM-DD"/>
+		
+		<br>
+		<input type="radio" name="searchby_date" value="2flex" required/> Enter flexible depart-by and arrive-by dates (+/-3 days).
+		<br><input type="text" name="flex_dates_start" placeholder="YYYY-MM-DD"/> to <input type="text" name="flex_dates_end" placeholder="YYYY-MM-DD"/>
 		<br><br>
 		
 		<input type="submit" value="Search Flights">
-	</form>	
+	</form>
+	<p><a href="CustomerPortal.jsp">Back to Home</a></p>
+	<p><a href="Logout.jsp">Log Out</a></p>
 <% } %>
 	</body>
 </html>

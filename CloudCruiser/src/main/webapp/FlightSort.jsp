@@ -168,6 +168,8 @@
 		out.print("<p>Timeout...</p>");
 	}
 	%>
+	<p><a href="BrowseFlights.jsp">Back to Flights</a></p>
+	<p><a href="Logout.jsp">Log Out</a></p>
 <% } %>
 	</body>
 </html>
