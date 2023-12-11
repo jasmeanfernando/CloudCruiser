@@ -17,9 +17,9 @@
 	<form method="post" action="loginAccount.jsp">
 		<table>
 			<tr>
-				<td>Email: </td><td><input type="text" name="username"></td></tr>
+			<td>Email: </td><td><input type="text" name="username"></td></tr>
         	<tr>
-				<td>Password: </td><td><input type="password" name="password"></td></tr>
+			<td>Password: </td><td><input type="password" name="password"></td></tr>
         </table>
 		
 		<input type="radio" name="usertype" value="Customer"> Passenger

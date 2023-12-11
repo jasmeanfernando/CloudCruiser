@@ -17,7 +17,7 @@
 <% if (session.getAttribute("user") == null) { %>
 	You are not logged in!
 	<br>
-	<a href="loginPortal.jsp">Please login.</a>
+	<a href="LoginPortal.jsp">Please login.</a>
 <% } else { %>
 	<h1>Welcome back, <%=session.getAttribute("user") %>!</h1>
 	<p><a href="BrowseFlights.jsp">Browse Flights</a></p>

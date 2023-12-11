@@ -17,7 +17,7 @@
 <% if (session.getAttribute("user") == null) { %>
 	You are not logged in!
 	<br>
-	<a href="loginPortal.jsp">Please login.</a>
+	<a href="LoginPortal.jsp">Please login.</a>
 <% } else { %>
 	<h1>Search for flights!</h1>
 	<br>
@@ -84,12 +84,12 @@
      			
      			typeOfSearch += "<br>* One-Way Trip";
      		}
-     		// ************************
-     		// ************************
-     		// Round Trip = 2+ Flights!
-     		// ************************
-     		// ************************
-     		else if (triptype.equalsIgnoreCase("roundtrip")) {
+     		// *********************************
+     		// *********************************
+     		// Round Trip/Any Trip = 2+ Flights!
+     		// *********************************
+     		// *********************************
+     		else if (triptype.equalsIgnoreCase("roundtrip") || triptype.equalsIgnoreCase("either")) {
      			//Initialize dates.
      			String whereByDate1 = "";
      			String whereByDate2 = "";
@@ -135,12 +135,12 @@
 					+ "WHERE Flight2.ArrivalAirportID = '" + departure_airport + "' AND Flight2.DepartureAirportID = '" + arrival_airport + "' "
 					+ whereByDate2;
 			
-     			
-     			typeOfSearch += "<br>* Round Trip";
-     		}
-     		// Any Trip.
-     		else {
-     			typeOfSearch += "<br>* Any Trip";
+     			if (triptype.equalsIgnoreCase("roundtrip")) {
+     				typeOfSearch += "<br>* Round Trip";
+     			}
+     			else {
+     				typeOfSearch += "<br>* Any Trip";
+     			}
      		}
      	}
      	

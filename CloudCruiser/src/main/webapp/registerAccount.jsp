@@ -31,11 +31,11 @@
 		// Create SQL statement.
 		PreparedStatement preparedStatement = null;
 		
-		// Get table that account needs to be added to: Customer or Representative.
+		// Insert account into correct table: Customer or Representative.
 		if (accountType.equalsIgnoreCase("Customer")) {
             String insertPassengerQuery = "INSERT INTO Customer (CID, Password, FirstName, LastName) VALUES (?, ?, ?, ?)";
             preparedStatement = con.prepareStatement(insertPassengerQuery);
-            preparedStatement.setString(1, accountPW);
+            preparedStatement.setString(1, accountID);
             preparedStatement.setString(2, accountPW);
             preparedStatement.setString(3, firstName);
             preparedStatement.setString(4, lastName);
@@ -43,7 +43,7 @@
 		else {
             String insertRepresentativeQuery = "INSERT INTO Representative (RID, Password, FirstName, LastName) VALUES (?, ?, ?, ?)";
             preparedStatement = con.prepareStatement(insertRepresentativeQuery);
-            preparedStatement.setString(1, accountPW);
+            preparedStatement.setString(1, accountID);
             preparedStatement.setString(2, accountPW);
             preparedStatement.setString(3, firstName);
             preparedStatement.setString(4, lastName);

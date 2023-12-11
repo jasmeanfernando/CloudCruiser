@@ -17,7 +17,7 @@
 <% if (session.getAttribute("user") == null) { %>
 	You are not logged in!
 	<br>
-	<a href="loginPortal.jsp">Please login.</a>
+	<a href="LoginPortal.jsp">Please login.</a>
 <% } else { %>
 	<h1>Browse all available flights!</h1>
 	<% try {
@@ -89,7 +89,7 @@
 		out.print("Price");
 		out.print("</td>");
 		
-		// Parse each tuple in Flight.
+		// Parse each tuple from queried table.
 		while (result.next()) {
 			// Make row.
 			out.print("<tr>");
@@ -144,6 +144,32 @@
 		out.print("<p>Timeout...</p>");
 	}
 	%>
+	<h2>Ready to Reserve a Flight?</h2>
+	<form method="post" action="ReserveFlight.jsp">
+		<table>
+			<tr>
+			<td>First Name: </td><td><input type="text" name="first_name"></td></tr>
+			<tr>
+			<tr>
+			<td>Last Name: </td><td><input type="text" name="last_name"></td></tr>
+			<tr>
+			<tr>
+			<td>Email: </td><td><input type="text" name="email"></td></tr>
+			<tr>
+			<td>Departing Flight Number: </td><td><input type="text" name="departing_flight_num"></td></tr>
+			<td>Arriving Flight Number: </td><td><input type="text" name="arriving_flight_num"></td></tr>
+			<tr>
+			<td>Flight Class:</td><td><input type="radio" name="flight_class" value="First"> First Class
+       		<input type="radio" name="flight_class" value="Business"> Business Class
+       		<input type="radio" name="flight_class" value="Economy"> Economy Class</td><tr>
+       		<tr>
+       		<td>Flight Type:</td><td><input type="radio" name="flight_type" value="oneway"> One-Way Trip
+       		<input type="radio" name="flight_type" value="roundtrip"> Round Trip</td><tr>
+		</table>
+		
+		<input type="submit" value="Submit">
+	</form>
+	
 	<h2>Sort By...</h2>
 	<form method="get" action="FlightSort.jsp">
 		<input type="radio" name="sortby" value="price" required> Price
