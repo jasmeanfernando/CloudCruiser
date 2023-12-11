@@ -139,5 +139,53 @@ public class FlightReservation
         }
         
 		ticketStatement.executeUpdate();
+		
+		// Close connection.
+        con.close();
     }
+	
+	public void cancelReservation(String email, String ticket) throws SQLException {
+		// Get database connection.
+		ApplicationDB db = new ApplicationDB();
+	    Connection con = db.getConnection();
+	    
+	    // DELETE RESERVATIONS:
+	    // Create query -> Accounts for empty ReturningFlightNumber.
+	    String flightQuery = "DELETE FROM Reservation "
+	    		+ "WHERE FlightNumber IN (SELECT DepartingFlightNumber "
+	    		+ "FROM Ticket "
+	    		+ "WHERE TicketNumber = ? "
+	    		+ "UNION "
+	    		+ "SELECT COALESCE(ReturningFlightNumber, 0) "
+	    		+ "FROM Ticket "
+	    		+ "WHERE TicketNumber = ?"
+	    		+ ")\n"
+	    		+ "AND Class IN ('First', 'Business')";
+	    
+	    // Create SQL statement.
+	    PreparedStatement flightStatement = con.prepareStatement(flightQuery);
+	    flightStatement.setInt(1, Integer.parseInt(ticket));
+	    flightStatement.setInt(2, Integer.parseInt(ticket));
+	    
+	    // Execute query.
+	    int rowsAffectedReservation = flightStatement.executeUpdate();
+	    System.out.println("Removed from Reservation: " + rowsAffectedReservation);
+	    
+	    // DELETE TICKET:
+	    if (rowsAffectedReservation > 0) {
+	    	// Create query.
+	    	String ticketQuery = "DELETE FROM Ticket WHERE TicketNumber = ?";
+	    	
+	    	// Create SQL statement.
+		    PreparedStatement ticketStatement = con.prepareStatement(ticketQuery);
+		    ticketStatement.setInt(1, Integer.parseInt(ticket));
+		    
+		    // Execute query.
+		    int rowsAffectedTicket = ticketStatement.executeUpdate();
+		    System.out.println("Removed from Ticket: " + rowsAffectedTicket);
+	    }
+	    
+	    // Close connection.
+        con.close();
+	}
 }

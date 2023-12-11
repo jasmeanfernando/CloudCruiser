@@ -151,7 +151,13 @@
 			out.print("</td>");
 			
 			out.print("<td>");
-			out.print(result.getString("IsLayover"));
+			String bool = result.getString("IsLayover");
+			if (bool == "1") {
+				out.print("Yes");
+			}
+			else {
+				out.print("No");
+			}
 			out.print("</td>");
 			
 			out.print("<td>");

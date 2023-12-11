@@ -17,12 +17,11 @@
 <% if (session.getAttribute("user") == null) { %>
 	You are not logged in!
 	<br>
-	<a href="LoginPortal.jsp">Please login.</a>
+	<a href="loginPortal.jsp">Please login.</a>
 <% } else { %>
 	<h1>Welcome back, <%=session.getAttribute("user") %>!</h1>
 	<p><a href="BrowseFlights.jsp">Browse Flights</a></p>
 	<p><a href="CustomerReservations.jsp">View Reservations</a></p>
-	<p><a href="CustomerWaitingList.jsp">View Waiting List</a></p>
 	<p><a href="QA.jsp">View Q&A Forum</a></p>
 	<p><a href="Logout.jsp">Log Out</a></p>
 <% } %>

@@ -26,15 +26,14 @@
 		Connection con = db.getConnection();
 		
 		// Create query -> Joins Flight and Layover.
-		String query = "SELECT f.FlightNumber, f.AirlineID, f.AircraftID, f.DepartureAirportID, "
-			+ "f.ArrivalAirportID, f.DepartureDateTime , f.ArrivalDateTime, "
-			+ "f.FlightDuration, f.IsLayover, f.IsInternational, f.DaysOfWeek, f.TotalPrice, "
-			+ "COUNT(l.LayoverNumber) AS NumberOfLayovers "
-			+ "FROM Flight f "
-			+ "LEFT JOIN Layover l ON f.FlightNumber = l.LayoverNumber "
-			+ "GROUP BY f.FlightNumber, f.AirlineID, f.AircraftID, f.DepartureAirportID, f.ArrivalAirportID, "
-			+ "f.DepartureDateTime, f.ArrivalDateTime, f.FlightDuration, f.IsLayover, f.IsInternational, "
-			+ "f.DaysOfWeek, f.TotalPrice";
+		String query = "SELECT F.FlightNumber, F.AirlineID, F.AircraftID, F.DepartureAirportID, F.ArrivalAirportID, "
+        	+ "F.DepartureDateTime, F.ArrivalDateTime, F.FlightDuration, F.TotalPrice, "
+        	+ "L.LayoverAirportID, "
+        	+ "COUNT(L.LayoverNumber) AS NumberOfLayovers "
+        	+ "FROM Flight F "
+        	+ "LEFT JOIN Layover L ON F.FlightNumber = L.LayoverNumber "
+        	+ "GROUP BY F.FlightNumber, F.AirlineID, F.AircraftID, F.DepartureAirportID, F.ArrivalAirportID, "
+        	+ "F.DepartureDateTime, F.ArrivalDateTime, F.FlightDuration, F.TotalPrice, L.LayoverAirportID";
 		
 		// Create SQL statement.
 		Statement stmt = con.createStatement();
@@ -82,7 +81,11 @@
 		out.print("</td>");
 		
 		out.print("<td>");
-		out.print("Layovers");
+		out.print("Number of Layovers");
+		out.print("</td>");
+		
+		out.print("<td>");
+		out.print("Layover Airport");
 		out.print("</td>");
 		
 		out.print("<td>");
@@ -128,6 +131,16 @@
 			
 			out.print("<td>");
 			out.print(result.getString("NumberOfLayovers"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			String bool = result.getString("LayoverAirportID");
+			if (bool == null) {
+				out.print("N/A");
+			}
+			else {
+				out.print("LayoverAirportID");
+			}
 			out.print("</td>");
 			
 			out.print("<td>");
