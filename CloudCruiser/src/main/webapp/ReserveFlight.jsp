@@ -29,8 +29,6 @@
      	String arrivingFlight = request.getParameter("arriving_flight_num");
      	String flightClass = request.getParameter("flight_class");
      	String flightType = request.getParameter("flight_type");
-     	
-     	// Handle null case with default value.
 		
 		// Get database connection.
 		ApplicationDB db = new ApplicationDB();
