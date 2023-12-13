@@ -20,55 +20,47 @@
 	<a href="LoginPortal.jsp">Please login.</a>
 <% } else { %>
 	<% try {
-		// Get parameters from EditUsers.jsp.
-		String firstName = request.getParameter("first_name");
-		String lastName = request.getParameter("last_name");
-		String email = request.getParameter("username");
-		String password = request.getParameter("password");
-		String action = request.getParameter("update");
-		String parameter = request.getParameter("new");
-		String type = request.getParameter("usertype");
-		// Handle null case with default value.
+		// Get parameters from EditSystems.jsp.
+		String aircraft = request.getParameter("aircraft");
+		String airline = request.getParameter("airline");
+		String newAirline = request.getParameter("new_airline");
+		String numSeats = request.getParameter("num_seats");
+		String updateAction = request.getParameter("action");
 		
 		// Get database connection.
 		ApplicationDB db = new ApplicationDB();
 		Connection con = db.getConnection();
 		
-		// Create query based updateAction and userType.
+		// Create query based updateAction.
 		String query = "";
-		if (type.equalsIgnoreCase("Customer")) {
-			if (action.equalsIgnoreCase("email")) {
-				query = "UPDATE Customer "
-					+ "SET CID = ? "
-					+ "WHERE CID = ?";
-			}
-			else {
-				query = "UPDATE Customer "
-					+ "SET Password = ? "
-					+ "WHERE Password = ?";
-			}
+		if (updateAction.equalsIgnoreCase("add")) {
+			query = "INSERT INTO Aircraft (AircraftID, AirlineID, NumOfSeats) "
+				+ "VALUES (?, ?, ?)";
+		}
+		else if (updateAction.equalsIgnoreCase("delete")) {
+			query = "DELETE FROM Aircraft "
+				+ "WHERE AircraftID = ?";
 		}
 		else {
-			if (action.equalsIgnoreCase("email")) {
-				query = "UPDATE Representative "
-					+ "SET RID = ? "
-					+ "WHERE RID = ?";
-			}
-			else {
-				query = "UPDATE Representative "
-					+ "SET Password = ? "
-					+ "WHERE Password = ?";
-			}
+			query = "UPDATE Aircraft "
+				+ "SET AirlineID = ? "
+				+ "WHERE AircraftID = ?";
 		}
 		
 		// Create SQL statement.
 		PreparedStatement prepstmt = con.prepareStatement(query);
-		prepstmt.setString(1, parameter);
-		if (action.equalsIgnoreCase("email")) {
-			prepstmt.setString(2, email);
+		
+		if (updateAction.equalsIgnoreCase("add")) {
+			prepstmt.setString(1, aircraft);
+			prepstmt.setString(2, airline);
+			prepstmt.setInt(3, Integer.parseInt(numSeats));
+		}
+		else if (updateAction.equalsIgnoreCase("delete")) {
+			prepstmt.setString(1, aircraft);
 		}
 		else {
-			prepstmt.setString(2, password);
+			prepstmt.setString(1, newAirline);
+			prepstmt.setString(2, aircraft);
 		}
 		
 		// Execute query.
@@ -76,10 +68,10 @@
 		
 		// Check if update was successful.
         if (rowsAffected > 0) {
-            out.println("<p>Account update successful!</p>");
+            out.println("<p>Aircraft modifications successful!</p>");
         }
         else {
-        	out.println("<p>Account update failed. Please try again.</p>");
+        	out.println("<p>Aircraft modifications failed. Please try again.</p>");
         }
 		
 		// Close the connection.
@@ -89,7 +81,7 @@
 		out.print("<p>Timeout...</p>");
 	}
 	%>
-	<p><a href="AdminPortal.jsp">Back to Home</a></p>
+	<p><a href="RepresentativePortal.jsp">Back to Home</a></p>
 	<p><a href="Logout.jsp">Log Out</a></p>
 <% } %>
 </html>

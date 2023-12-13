@@ -20,55 +20,42 @@
 	<a href="LoginPortal.jsp">Please login.</a>
 <% } else { %>
 	<% try {
-		// Get parameters from EditUsers.jsp.
-		String firstName = request.getParameter("first_name");
-		String lastName = request.getParameter("last_name");
-		String email = request.getParameter("username");
-		String password = request.getParameter("password");
-		String action = request.getParameter("update");
-		String parameter = request.getParameter("new");
-		String type = request.getParameter("usertype");
-		// Handle null case with default value.
+		// Get parameters from RepresentativeReservations.jsp.
+		String email = request.getParameter("email");
+		String reservation = request.getParameter("res_num");
+		String newFlightNum = request.getParameter("flight_num");
+		String newFlightClass = request.getParameter("flight_class");
+		String updateInfo = request.getParameter("change");
 		
 		// Get database connection.
 		ApplicationDB db = new ApplicationDB();
 		Connection con = db.getConnection();
 		
-		// Create query based updateAction and userType.
+		// Create query based updateAction.
 		String query = "";
-		if (type.equalsIgnoreCase("Customer")) {
-			if (action.equalsIgnoreCase("email")) {
-				query = "UPDATE Customer "
-					+ "SET CID = ? "
-					+ "WHERE CID = ?";
-			}
-			else {
-				query = "UPDATE Customer "
-					+ "SET Password = ? "
-					+ "WHERE Password = ?";
-			}
+		if (updateInfo.equalsIgnoreCase("flight")) {
+			query = "UPDATE Reservation "
+				+ "SET FlightNumber = ? "
+				+ "WHERE ReservationNumber = ? AND CustomerID = ?";
 		}
 		else {
-			if (action.equalsIgnoreCase("email")) {
-				query = "UPDATE Representative "
-					+ "SET RID = ? "
-					+ "WHERE RID = ?";
-			}
-			else {
-				query = "UPDATE Representative "
-					+ "SET Password = ? "
-					+ "WHERE Password = ?";
-			}
+			query = "UPDATE Reservation "
+				+ "SET Class = ? "
+				+ "WHERE ReservationNumber = ? AND CustomerID = ?";
 		}
 		
 		// Create SQL statement.
 		PreparedStatement prepstmt = con.prepareStatement(query);
-		prepstmt.setString(1, parameter);
-		if (action.equalsIgnoreCase("email")) {
-			prepstmt.setString(2, email);
+		
+		if (updateInfo.equalsIgnoreCase("flight")) {
+			prepstmt.setString(1, newFlightNum);
+			prepstmt.setString(2, reservation);
+			prepstmt.setString(3, email);
 		}
 		else {
-			prepstmt.setString(2, password);
+			prepstmt.setString(1, newFlightClass);
+			prepstmt.setString(2, reservation);
+			prepstmt.setString(3, email);
 		}
 		
 		// Execute query.
@@ -76,10 +63,10 @@
 		
 		// Check if update was successful.
         if (rowsAffected > 0) {
-            out.println("<p>Account update successful!</p>");
+            out.println("<p>Reservation modifications successful!</p>");
         }
         else {
-        	out.println("<p>Account update failed. Please try again.</p>");
+        	out.println("<p>Reservation modifications failed. Please try again.</p>");
         }
 		
 		// Close the connection.
@@ -89,7 +76,7 @@
 		out.print("<p>Timeout...</p>");
 	}
 	%>
-	<p><a href="AdminPortal.jsp">Back to Home</a></p>
+	<p><a href="RepresentativePortal.jsp">Back to Home</a></p>
 	<p><a href="Logout.jsp">Log Out</a></p>
 <% } %>
 </html>
