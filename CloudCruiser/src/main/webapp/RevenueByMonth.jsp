@@ -75,7 +75,7 @@
      	out.print("</td>");
      	
      	out.print("<td>");
-     	out.print("TotalPrice");
+     	out.print("Total Price");
      	out.print("</td>");
      	
      	// Parse each tuple from queried table.

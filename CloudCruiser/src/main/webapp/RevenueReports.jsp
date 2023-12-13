@@ -55,6 +55,16 @@
 		</table>
 		<input type="submit" value="Submit">
 	</form>
+	
+	<h2>Sort By Most Active...</h2>
+	<form method="get" action="RevenueSort.jsp">
+		<table>
+			<tr>
+			<td><input type="radio" name="sortby" value="Passenger" required> Passenger</td><tr>
+			<td><input type="radio" name="sortby" value="Flight" required> Flight</td><tr>
+		</table>
+		<input type="submit" value="Submit">
+	</form>
 	<p><a href="AdminPortal.jsp">Back to Home</a></p>
 	<p><a href="Logout.jsp">Log Out</a></p>
 <% } %>

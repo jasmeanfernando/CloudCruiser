@@ -246,6 +246,87 @@
 		out.print("<p>Timeout...</p>");
 	}
 	%>
+	<h1>Browse all waiting lists!</h1>
+	<% try {
+		// Get CID for query.
+		String cid = (String) session.getAttribute("user");
+				
+		// Get database connection.
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+		
+		// Create query -> Joins Ticket and Reservation.
+		String query = "SELECT W.WaitingID, W.CustomerID, W.FlightNumber, W.Class, W.PurchaseDateTime "
+			+ "FROM WaitingList W "
+			+ "WHERE W.CustomerID = '" + cid + "'";
+		
+		// Create SQL statement.
+		Statement stmt = con.createStatement();
+		
+		// Execute query.
+		ResultSet result = stmt.executeQuery(query);
+		
+		// Create HTML Table.
+		out.print("<table border=2>");
+		
+		// Make row.
+		out.print("<tr>");
+		
+		// Make column.
+		out.print("<td>");
+		out.print("WaitingID"); // Column header.
+		out.print("</td>");
+		
+		out.print("<td>");
+		out.print("Email");
+		out.print("</td>");
+		
+		out.print("<td>");
+		out.print("Flight Number");
+		out.print("</td>");
+		
+		out.print("<td>");
+		out.print("Class");
+		out.print("</td>");
+		
+		out.print("<td>");
+		out.print("Purchase Date & Time");
+		out.print("</td>");
+		
+		// Parse each tuple from queried table.
+		while (result.next()) {
+			// Make row.
+			out.print("<tr>");
+			// Make column -> Prints "FlightNumber" of all existing tuples.
+			out.print("<td>");
+			out.print(result.getString("WaitingID"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(result.getString("CustomerID"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(result.getString("FlightNumber"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(result.getString("Class"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(result.getString("PurchaseDateTime"));
+			out.print("</td>");
+		}
+		out.print("</table>");
+        
+		// Close the connection.
+        con.close();
+	} catch (Exception ex) {
+		out.print(ex);
+		out.print("<p>Timeout...</p>");
+	}
+	%>
 	<h2>Want to Cancel a Ticket/Reservation?</h2>
 	<form method="post" action="CancelReservation.jsp">
 		<table>
