@@ -6,9 +6,16 @@ import java.sql.SQLException;
 
 public class ApplicationDB
 {
+	/**
+	 * Empty Constructor.
+	 */
 	public ApplicationDB() {
 	}
-
+	
+	/**
+	 * Method that establishes a connection with the database.
+	 * @return connection
+	 */
 	public Connection getConnection() {
 		//Create a connection string to local database.
 		String connectionUrl = "jdbc:mysql://localhost:3306/cloudcruiserdatabase?useSSL=false";
@@ -35,6 +42,10 @@ public class ApplicationDB
 		return connection;
 	}
 	
+	/**
+	 * Method that closes a connection with the database.
+	 * @param connection
+	 */
 	public void closeConnection(Connection connection) {
 		try {
 			connection.close();
@@ -43,6 +54,10 @@ public class ApplicationDB
 		}
 	}
 	
+	/**
+	 * Main Method.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		ApplicationDB dao = new ApplicationDB();
 		Connection connection = dao.getConnection();

@@ -7,10 +7,27 @@ import java.sql.SQLException;
 
 public class FlightReservation
 {
+	/**
+	 * Empty Constructor.
+	 */
 	public FlightReservation() {
 	}
 	
-	public void makeReservation(String firstName, String lastName, String email, String departingFlight, String arrivingFlight, String flightClass, String flightType) throws SQLException {
+	/**
+	 * Method that makes flight reservations and creates a ticket.
+	 * If seats available on flight, add to Reservation table.
+	 * Otherwise, add to WaitingList table.
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param departingFlight
+	 * @param arrivingFlight
+	 * @param flightClass
+	 * @param flightType
+	 * @param newTicket
+	 * @throws SQLException
+	 */
+	public void makeReservation(String firstName, String lastName, String email, String departingFlight, String arrivingFlight, String flightClass, String flightType, boolean newTicket) throws SQLException {
 		// Get database connection.
     	ApplicationDB db = new ApplicationDB();
     	Connection con = db.getConnection();
@@ -42,8 +59,7 @@ public class FlightReservation
     		
     		if (availableSeats > 0) {
     			// Create reservation.
-    			String reservationQuery = "INSERT INTO Reservation (CustomerID, FlightNumber, Class) "
-    					+ "VALUES (?, ?, ?)";
+    			String reservationQuery = "INSERT INTO Reservation (CustomerID, FlightNumber, Class) VALUES (?, ?, ?)";
     			
     			PreparedStatement reservationStatement = con.prepareStatement(reservationQuery);
     			reservationStatement.setString(1, email);
@@ -56,8 +72,7 @@ public class FlightReservation
     		// No seats available.
     		else {
     			// Add to WaitingList since there are no available seats.
-    			String addToWaitingListQuery = "INSERT INTO WaitingList (CustomerID, FirstName, LastName, FlightNumber, Class) "
-    					+ "VALUES (?, ?, ?, ?, ?)";
+    			String addToWaitingListQuery = "INSERT INTO WaitingList (CustomerID, FirstName, LastName, FlightNumber, Class) VALUES (?, ?, ?, ?, ?)";
     			
     			PreparedStatement addToWaitingListStatement = con.prepareStatement(addToWaitingListQuery);
     			addToWaitingListStatement.setString(1, email);
@@ -72,7 +87,7 @@ public class FlightReservation
     	}
     	
     	// HANDLE ARRIVING FLIGHT:
-    	if (flightType != null && flightType.equalsIgnoreCase("roundtrip")) {
+    	if (flightType != null && flightType.equalsIgnoreCase("round")) {
     		// Create query.
         	String checkSeatsQuery2 = "SELECT Aircraft.AircraftID, "
         	        + "Aircraft.NumOfSeats AS TotalSeats, "
@@ -113,8 +128,7 @@ public class FlightReservation
         		// No seats available.
         		else {
         			// Add to WaitingList since there are no available seats.
-        			String addToWaitingListQuery = "INSERT INTO WaitingList (CustomerID, FirstName, LastName, FlightNumber, Class) "
-        					+ "VALUES (?, ?, ?, ?, ?, ?)";
+        			String addToWaitingListQuery = "INSERT INTO WaitingList (CustomerID, FirstName, LastName, FlightNumber, Class) VALUES (?, ?, ?, ?, ?, ?)";
         			
         			PreparedStatement addToWaitingListStatement = con.prepareStatement(addToWaitingListQuery);
         			addToWaitingListStatement.setString(1, email);
@@ -129,32 +143,41 @@ public class FlightReservation
         	}
     	}
     	
-    	// FLIGHTS RESERVED?
-    	// Create ticket.
-    	String ticketQuery = "INSERT INTO Ticket (CustomerID, FirstName, LastName, DepartingFlightNumber, ReturningFlightNumber) "
-				+ "VALUES (?, ?, ?, ?, ?)";
-		
-		PreparedStatement ticketStatement = con.prepareStatement(ticketQuery);
-		ticketStatement.setString(1, email);
-		ticketStatement.setString(2, firstName);
-		ticketStatement.setString(3, lastName);
-		ticketStatement.setInt(4, Integer.parseInt(departingFlight));
-		// Check if arrivingFlight is empty -> set null in the PreparedStatement.
-        if (arrivingFlight == null || arrivingFlight.isEmpty()) {
-            ticketStatement.setNull(5, java.sql.Types.INTEGER);
-        }
-        else {
-            ticketStatement.setInt(5, Integer.parseInt(arrivingFlight));
-        }
-        
-		ticketStatement.executeUpdate();
-		
-		System.out.println("Added to Ticket.");
+    	// Create ticket:
+    	// newTicket = true if method is being called by PassengerBookFlight.jsp.
+    	// newTicket = false if method is being called by FlightReservation.java.
+    	if (newTicket) {
+    		String ticketQuery = "INSERT INTO Ticket (CustomerID, FirstName, LastName, DepartingFlightNumber, ReturningFlightNumber) VALUES (?, ?, ?, ?, ?)";
+    		
+    		PreparedStatement ticketStatement = con.prepareStatement(ticketQuery);
+    		ticketStatement.setString(1, email);
+    		ticketStatement.setString(2, firstName);
+    		ticketStatement.setString(3, lastName);
+    		ticketStatement.setInt(4, Integer.parseInt(departingFlight));
+    		// Check if arrivingFlight is empty -> set null in the PreparedStatement.
+            if (arrivingFlight == null || arrivingFlight.isEmpty()) {
+                ticketStatement.setNull(5, java.sql.Types.INTEGER);
+            }
+            else {
+                ticketStatement.setInt(5, Integer.parseInt(arrivingFlight));
+            }
+            
+    		ticketStatement.executeUpdate();
+    		
+    		System.out.println("Added to Ticket.");
+    	}
 		
 		// Close connection.
         con.close();
     }
 	
+	/**
+	 * Method that cancels flight reservations and deletes a ticket (if passenger is first or business class).
+	 * Passengers on waiting list of said flight are then given a reservation.
+	 * @param email
+	 * @param ticket
+	 * @throws SQLException
+	 */
 	public void cancelReservation(String email, String ticket) throws SQLException {
 		// Get database connection.
 		ApplicationDB db = new ApplicationDB();
@@ -186,8 +209,7 @@ public class FlightReservation
 	    if (rowsAffectedReservation > 0) {
 	    	// DELETE TICKET:
 	    	// Create query.
-	    	String waitingListQuery = "SELECT WaitingID, CustomerID, FirstName, LastName, FlightNumber, Class "
-	    			+ "FROM WaitingList";
+	    	String waitingListQuery = "SELECT WaitingID, CustomerID, FirstName, LastName, FlightNumber, Class FROM WaitingList";
 	    	
 	    	// Create SQL statement.
 		    PreparedStatement waitingListStatement = con.prepareStatement(waitingListQuery);
@@ -204,11 +226,11 @@ public class FlightReservation
                 int flightNumber = waitingListResultSet.getInt("FlightNumber");
                 String flightClass = waitingListResultSet.getString("Class");
 
-                // Call makeReservation method.
-                makeReservation(firstName, lastName, customerID, String.valueOf(flightNumber), null, flightClass, null);
+                // CREATE RESERVATION.
+                makeReservation(firstName, lastName, customerID, String.valueOf(flightNumber), null, flightClass, null, false);
 
-                // DELETE WAITINGLIST.
-                deleteFromWaitingList(con, waitingID);
+                // DELETE FROM WAITINGLIST.
+                deleteFromWaitingList(waitingID);
             }
 	    	
 	    	// Create query.
@@ -227,7 +249,16 @@ public class FlightReservation
         con.close();
 	}
 	
-	private void deleteFromWaitingList(Connection con, int waitingID) throws SQLException {
+	/**
+	 * Helper method that deletes from WaitingList table.
+	 * @param waitingID
+	 * @throws SQLException
+	 */
+	private void deleteFromWaitingList(int waitingID) throws SQLException {
+		// Get database connection.
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+		
 		// Create query.
 	    String deleteFromWaitingListQuery = "DELETE FROM WaitingList WHERE WaitingID = ?";
 	    

@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="com.cs336.pkg.*" %>
 <!--Import some libraries that have classes that we need -->
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
@@ -9,20 +9,20 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-			<title>CustomerPortal</title>
+			<title>AdminPortal</title>
 	</head>
 	
 	<body>
-<!-- Customer must be logged in to access this page. -->
+<!-- Admin must be logged in to access this page. -->
 <% if (session.getAttribute("user") == null) { %>
 	You are not logged in!
 	<br>
 	<a href="LoginPortal.jsp">Please login.</a>
 <% } else { %>
 	<h1>Welcome back, <%=session.getAttribute("user") %>!</h1>
-	<p><a href="BrowseFlights.jsp">Browse Flights</a></p>
-	<p><a href="CustomerReservations.jsp">View Reservations</a></p>
-	<p><a href="CustomerQA.jsp">View Q&A Forum</a></p>
+	<p><a href="EditUsers.jsp">Edit Customers/Representatives</a></p>
+	<p><a href="AdminReservations.jsp">View Reservations</a></p>
+	<p><a href="RevenueReports.jsp">View Revenue Reports</a></p>
 	<p><a href="Logout.jsp">Log Out</a></p>
 <% } %>
 	</body>

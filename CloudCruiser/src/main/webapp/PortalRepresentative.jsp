@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ page import="com.cs336.pkg.ApplicationDB" %>
+<%@ page import="com.cs336.pkg.*" %>
 <!--Import some libraries that have classes that we need -->
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
@@ -9,7 +9,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>CloudCruiser</title>
+		<title>RepresentativePortal</title>
 		<!-- Google Fonts -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico|Poppins">
 		<!-- CloudCruiser CSS -->
@@ -19,35 +19,53 @@
 	</head>
 	
 	<body>
-		<div class="container mt-5">
+	<!-- Customer must be logged in to access this page. -->
+	<%
+	if (session.getAttribute("user") == null) {
+		out.println("<p class=\"cc_paragraph\">You are not logged in! Please login.</p>");
+		out.println("<a class=\"cc_button\" href=\"PortalLogin.jsp\">Log In</a>");
+	}
+	else {
+	%>
+		<div class="container mt-1">
 		
+		<!-- Logo -->
 		<div class="text-center mb-4">
 		<img src="/CloudCruiser/resources/assets/logo.jpg" alt="Logo"
-		class="img-fluid rounded" style="max-width: 100%;">
+		class="img-fluid rounded" style="max-width: 25%;">
+		</div>
+		
+		<!-- Heading -->
+		<%
+		User user = new User ();
+		String firstName = user.getUserInformation("Representative", (String)session.getAttribute("user"), "FirstName");
+		%>
+		<p class="cc_heading text-center">Welcome back, <%=firstName%>!</p>
+		
+		<!-- Passenger Pages -->
+		<div class="row justify-content-center">
+			<a class="cc_button" href="RepresentativeSystems.jsp">Systems</a>
+		</div>
+		<div class="row justify-content-center">
+			<a class="cc_button" href="RepresentativeReservations.jsp">Reservations</a>
+		</div>
+		<div class="row justify-content-center">
+			<a class="cc_button" href="RepresentativeQA.jsp">Q&A Forum</a>
+		</div>
+		<div class="row justify-content-center">
+			<a class="cc_button" href="PortalLogout.jsp">Logout</a>
 		</div>
 		
 		<div class="text-center mb-4">
-		<img src="/CloudCruiser/resources/assets/cover1.jpg" alt="Home Cover"
+		<img src="/CloudCruiser/resources/assets/cover2.jpg" alt="Account Home Cover"
 		class="img-fluid rounded" style="max-width: 100%;">
 		</div>
 		
-		<p class="cc_paragraph">Imagine a world where booking flights is as easy as catching a cloud.
-        With CloudCruiser, your travel dreams take flight effortlessly, and the only turbulence is deciding
-        which amazing destination to choose! Say goodbye to the hassle, and hello to a sky full of possibilities.
-        Fasten your seatbelt, and let the adventure unfold with CloudCruiser!</p>
-        
-        <div class="row justify-content-center">
-        	<div class="col-md-6 text-center">
-                <a class="cc_button" href="PortalRegister.jsp">Sign Up</a>
-            </div>
-            <div class="col-md-6 text-center">
-                <a class="cc_button" href="PortalLogin.jsp">Log In</a>
-            </div>
-        </div>
-        
-    	</div>
-    
-    <!-- Bootstrap JS and Popper.js -->
+		</div>
+	
+	<!-- Close the else statement. -->
+	<% } %>
+	<!-- Bootstrap JS and Popper.js -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<!-- Bootstrap JavaScript -->
