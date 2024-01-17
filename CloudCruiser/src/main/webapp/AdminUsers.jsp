@@ -9,7 +9,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>RepresentativePortal</title>
+		<title>AdminPortal</title>
 		<!-- Google Fonts -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico|Poppins">
 		<!-- CloudCruiser CSS -->
@@ -19,7 +19,7 @@
 	</head>
 	
 	<body>
-	<!-- Representative must be logged in to access this page. -->
+	<!-- Admin must be logged in to access this page. -->
 	<%
 	if (session.getAttribute("user") == null) {
 		out.println("<p class=\"cc_paragraph\">You are not logged in! Please login.</p>");
@@ -35,16 +35,16 @@
 		class="img-fluid rounded" style="max-width: 25%;">
 		</div>
 		
-		<!-- Questions Table -->
-		<p class="cc_heading">Questions</p>
-		<p class="cc_paragraph">Below are questions posted to the public Q&A Forum.</p>
+		<!-- Customer Table -->
+		<p class="cc_heading">Customers</p>
+		<p class="cc_paragraph">Below are valid customers in CloudCruiser.</p>
 		<table class="table table-striped table-hover">
 		<thead>
 		<tr>
-			<th>Question ID</th>
-			<th>Customer</th>
-			<th>Inquiry</th>
-			<th>Posted Date/Time</th>
+			<th>Email</th>
+			<th>Password</th>
+			<th>First Name</th>
+			<th>Last Name</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -55,7 +55,7 @@
 			Connection con = db.getConnection();
 			
 			// Create query.
-			String query = "SELECT QuestionID, CustomerID, QuestionText, QuestionDateTime FROM Questions";
+			String query = "SELECT CID, Password, FirstName, LastName FROM Customer";
 			
 			// Create SQL statement.
 			PreparedStatement prepstmt = con.prepareStatement(query);
@@ -67,10 +67,10 @@
 			while (resultset.next()) {
 		%>
 			<tr>
-				<td><%= resultset.getString("QuestionID") %></td>
-				<td><%= resultset.getString("CustomerID") %></td>
-				<td><%= resultset.getString("QuestionText") %></td>
-				<td><%= resultset.getString("QuestionDateTime") %></td>
+				<td><%= resultset.getString("CID") %></td>
+				<td><%= resultset.getString("Password") %></td>
+				<td><%= resultset.getString("FirstName") %></td>
+				<td><%= resultset.getString("LastName") %></td>
 			</tr>
 		<%
 			}
@@ -80,28 +80,27 @@
 		}
 		catch (Exception e) {
 			out.print("<p class=\"cc_paragraph\">Error loading page. Please try again.</p>");
-			out.println("<a class=\"cc_button\" href=\"PortalRepresentative.jsp\">Home</a>");
+			out.println("<a class=\"cc_button\" href=\"PortalAdmin.jsp\">Home</a>");
 		}
 		%>
 		</tbody>
 		</table>
 		
-		<!-- Refresh Questions -->
+		<!-- Refresh Database -->
 		<div class="row justify-content-right">
-			<a class="cc_button" href="RepresentativeQA.jsp">Refresh</a>
+			<a class="cc_button" href="AdminUsers.jsp">Refresh</a>
 		</div>
 		
-		<!-- Answers Table -->
-		<p class="cc_heading">Answers</p>
-		<p class="cc_paragraph">Below are answers posted to the public Q&A Forum.</p>
+		<!-- Representative Table -->
+		<p class="cc_heading">Representatives</p>
+		<p class="cc_paragraph">Below are valid representatives in CloudCruiser.</p>
 		<table class="table table-striped table-hover">
 		<thead>
 		<tr>
-			<th>Question ID</th>
-			<th>Customer</th>
-			<th>Representative</th>
-			<th>Inquiry</th>
-			<th>Posted Date/Time</th>
+			<th>Email</th>
+			<th>Password</th>
+			<th>First Name</th>
+			<th>Last Name</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -112,7 +111,7 @@
 			Connection con = db.getConnection();
 			
 			// Create query.
-			String query = "SELECT AnswerID, CustomerID, RepresentativeID, AnswerText, AnswerDateTime FROM Answers";
+			String query = "SELECT RID, Password, FirstName, LastName FROM Representative";
 			
 			// Create SQL statement.
 			PreparedStatement prepstmt = con.prepareStatement(query);
@@ -124,11 +123,10 @@
 			while (resultset.next()) {
 		%>
 			<tr>
-				<td><%= resultset.getString("AnswerID") %></td>
-				<td><%= resultset.getString("CustomerID") %></td>
-				<td><%= resultset.getString("RepresentativeID") %></td>
-				<td><%= resultset.getString("AnswerText") %></td>
-				<td><%= resultset.getString("AnswerDateTime") %></td>
+				<td><%= resultset.getString("RID") %></td>
+				<td><%= resultset.getString("Password") %></td>
+				<td><%= resultset.getString("FirstName") %></td>
+				<td><%= resultset.getString("LastName") %></td>
 			</tr>
 		<%
 			}
@@ -138,41 +136,61 @@
 		}
 		catch (Exception e) {
 			out.print("<p class=\"cc_paragraph\">Error loading page. Please try again.</p>");
-			out.println("<a class=\"cc_button\" href=\"PortalRepresentative.jsp\">Home</a>");
+			out.println("<a class=\"cc_button\" href=\"PortalAdmin.jsp\">Home</a>");
 		}
 		%>
 		</tbody>
 		</table>
 		
-		<!-- Refresh Answers -->
+		<!-- Refresh Database -->
 		<div class="row justify-content-right">
-			<a class="cc_button" href="RepresentativeQA.jsp">Refresh</a>
+			<a class="cc_button" href="AdminUsers.jsp">Refresh</a>
 		</div>
 		
-		<!-- Answer a Question -->
-		<p class="cc_heading">Answer a Question</p>
-		<form class="row g-3 align-items-center cc_form" method="post" action="RepresentativeEditQA.jsp">
+		<!-- Edit User -->
+		<p class="cc_heading">Edit User</p>
+		<form class="row g-3 align-items-center cc_form" method="post" action="AdminEditUsers.jsp">
 			<div class="col">
 			
 			<div class="mb-3">
-				<label class="form-label">Customer Email:</label>
-				<input type="text" class="form-control" name="customerEmail" id="customerEmail" placeholder="" required>
+				<select class="form-control" name="userAction">
+					<option value="addUser">Add User</option>
+					<option value="removeUser">Remove User</option>
+				</select>
 			</div>
 			
 			<div class="mb-3">
-				<label class="form-label">Question ID:</label>
-				<input type="text" class="form-control" name="questionId" id="questionId" placeholder="" required>
+			<label class="form-label">Account Type:</label>
+				<select class="form-control" name="accountType">
+					<option value="Customer">Customer</option>
+					<option value="Representative">Representative</option>
+				</select>
 			</div>
 			
 			<div class="mb-3">
-				<label class="form-label">Response:</label>
-				<input type="text" class="form-control" name="answerResponse" id="answerResponse" placeholder="" required>
+				<label class="form-label">First Name:</label>
+				<input type="text" class="form-control" name="firstName" id="firstName" required>
+			</div>
+			
+			<div class="mb-3">
+				<label class="form-label">Last Name:</label>
+				<input type="text" class="form-control" name="lastName" id="lastName" required>
 			</div>
 		
 			<div class="mb-3">
-				<button type="submit" class="cc_button">Post</button>
+				<label class="form-label">Email:</label>
+				<input type="text" class="form-control" name="email" id="email" required>
+			</div>
+			
+			<div class="mb-3">
+				<label class="form-label">Password:</label>
+				<input type="text" class="form-control" name="password" id="password" required>
 			</div>
 		
+			<div class="mb-3">
+				<button type="submit" class="cc_button">Edit</button>
+			</div>
+			
 			</div>
 		</form>
 		

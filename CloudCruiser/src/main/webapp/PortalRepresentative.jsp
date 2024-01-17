@@ -19,7 +19,7 @@
 	</head>
 	
 	<body>
-	<!-- Customer must be logged in to access this page. -->
+	<!-- Representative must be logged in to access this page. -->
 	<%
 	if (session.getAttribute("user") == null) {
 		out.println("<p class=\"cc_paragraph\">You are not logged in! Please login.</p>");
@@ -42,7 +42,7 @@
 		%>
 		<p class="cc_heading text-center">Welcome back, <%=firstName%>!</p>
 		
-		<!-- Passenger Pages -->
+		<!-- Representative Pages -->
 		<div class="row justify-content-center">
 			<a class="cc_button" href="RepresentativeSystems.jsp">Systems</a>
 		</div>

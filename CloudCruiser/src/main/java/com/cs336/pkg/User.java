@@ -61,4 +61,75 @@ public class User
 		
 		return null;
 	}
+	
+	/**
+	 * Method that adds a user.
+	 * @param accountType
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param password
+	 * @throws SQLException
+	 */
+	public void addUser(String accountType, String firstName, String lastName, String email, String password) throws SQLException {
+		// Get database connection.
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+		
+		// Create query.
+		String query = "";
+		if (accountType.equalsIgnoreCase("Customer")) {
+			query = "INSERT INTO Customer (CID, Password, FirstName, LastName) VALUES (?, ?, ?, ?)";
+		}
+		else {
+			query = "INSERT INTO Representative (RID, Password, FirstName, LastName) VALUES (?, ?, ?, ?)";
+		}
+		
+		// Create SQL statement.
+		PreparedStatement prepstmt = con.prepareStatement(query);
+		prepstmt.setString(1, email);
+		prepstmt.setString(2, password);
+		prepstmt.setString(3, firstName);
+		prepstmt.setString(4, lastName);
+		
+		// Execute query.
+		int resultset = prepstmt.executeUpdate();
+	}
+	
+	/**
+	 * Method that removes a user.
+	 * @param accountType
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param password
+	 * @throws SQLException
+	 */
+	public int removeUser(String accountType, String firstName, String lastName, String email, String password) throws SQLException {
+		// Get database connection.
+		ApplicationDB db = new ApplicationDB();
+		Connection con = db.getConnection();
+		
+		// Create query.
+		String query = "";
+		if (accountType.equalsIgnoreCase("Customer")) {
+			query = "DELETE FROM Customer WHERE CID = ? AND Password = ? AND FirstName = ? AND LastName = ?";
+		}
+		else {
+			query = "DELETE FROM Representative WHERE RID = ? AND Password = ? AND FirstName = ? AND LastName = ?";
+		}
+		
+		// Create SQL statement.
+		PreparedStatement prepstmt = con.prepareStatement(query);
+		prepstmt.setString(1, email);
+		prepstmt.setString(2, password);
+		prepstmt.setString(3, firstName);
+		prepstmt.setString(4, lastName);
+		
+		// Execute query.
+		int resultset = prepstmt.executeUpdate();
+		
+		// Return number of rows affected.
+		return resultset;
+	}
 }

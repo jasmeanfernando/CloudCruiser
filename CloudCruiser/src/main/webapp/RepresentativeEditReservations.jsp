@@ -4,12 +4,12 @@
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 <%@ page import="java.sql.*" %>
-
+    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>AdminPortal</title>
+		<title>RepresentativePortal</title>
 		<!-- Google Fonts -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico|Poppins">
 		<!-- CloudCruiser CSS -->
@@ -19,49 +19,54 @@
 	</head>
 	
 	<body>
-	<!-- Admin must be logged in to access this page. -->
+	<!-- Representative must be logged in to access this page. -->
 	<%
 	if (session.getAttribute("user") == null) {
 		out.println("<p class=\"cc_paragraph\">You are not logged in! Please login.</p>");
 		out.println("<a class=\"cc_button\" href=\"PortalLogin.jsp\">Log In</a>");
 	}
 	else {
+		try {
+			// Get database connection.
+			ApplicationDB db = new ApplicationDB();
+			Connection con = db.getConnection();
+			
+			// Get parameters from RepresentativeReservations.jsp.
+			String reservationAction = request.getParameter("reservationAction");
+			String reservationEmail = request.getParameter("reservationEmail");
+			String reservationId = request.getParameter("reservationId");
+			String reservationChange = request.getParameter("reservationChange");
+			
+			// Create query.
+			String query = "";
+			if (reservationAction.equalsIgnoreCase("updateFlightId")) {
+				query = "UPDATE Reservation "
+					+ "SET FlightNumber = ? "
+					+ "WHERE ReservationNumber = ? AND CustomerID = ?";
+			}
+			else {
+				query = "UPDATE Reservation "
+					+ "SET Class = ? "
+					+ "WHERE ReservationNumber = ? AND CustomerID = ?";
+			}
+		
+			// Create SQL statement.
+			PreparedStatement prepstmt = con.prepareStatement(query);
+			prepstmt.setString(1, reservationChange);
+			prepstmt.setString(2, reservationId);
+			prepstmt.setString(3, reservationEmail);
+			
+			// Execute query.
+			int resultset = prepstmt.executeUpdate();
+				
+			// Close connection.
+			con.close();
+		}
+		catch (Exception e) {
+			out.print("<p class=\"cc_paragraph\">Error loading page. Please try again.</p>");
+			out.println("<a class=\"cc_button\" href=\"PortalRepresentative.jsp\">Home</a>");
+		}
 	%>
-		<div class="container mt-1">
-		
-		<!-- Logo -->
-		<div class="text-center mb-4">
-		<img src="/CloudCruiser/resources/assets/logo.jpg" alt="Logo"
-		class="img-fluid rounded" style="max-width: 25%;">
-		</div>
-		
-		<!-- Heading -->
-		<%
-		User user = new User ();
-		String firstName = user.getUserInformation("Admin", (String)session.getAttribute("user"), "FirstName");
-		%>
-		<p class="cc_heading text-center">Welcome back, <%=firstName%>!</p>
-		
-		<!-- Admin Pages -->
-		<div class="row justify-content-center">
-			<a class="cc_button" href="AdminUsers.jsp">Users</a>
-		</div>
-		<div class="row justify-content-center">
-			<a class="cc_button" href="AdminReservations.jsp">Reservations</a>
-		</div>
-		<div class="row justify-content-center">
-			<a class="cc_button" href="AdminRevenueReports.jsp">Revenue Reports</a>
-		</div>
-		<div class="row justify-content-center">
-			<a class="cc_button" href="PortalLogout.jsp">Logout</a>
-		</div>
-		
-		<div class="text-center mb-4">
-		<img src="/CloudCruiser/resources/assets/cover2.jpg" alt="Account Home Cover"
-		class="img-fluid rounded" style="max-width: 100%;">
-		</div>
-		
-		</div>
 	
 	<!-- Close the else statement. -->
 	<% } %>

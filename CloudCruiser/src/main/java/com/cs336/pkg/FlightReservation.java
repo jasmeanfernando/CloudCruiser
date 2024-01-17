@@ -144,7 +144,7 @@ public class FlightReservation
     	}
     	
     	// Create ticket:
-    	// newTicket = true if method is being called by PassengerBookFlight.jsp.
+    	// newTicket = true if method is being called by PassengerEditFlights.jsp.
     	// newTicket = false if method is being called by FlightReservation.java.
     	if (newTicket) {
     		String ticketQuery = "INSERT INTO Ticket (CustomerID, FirstName, LastName, DepartingFlightNumber, ReturningFlightNumber) VALUES (?, ?, ?, ?, ?)";
