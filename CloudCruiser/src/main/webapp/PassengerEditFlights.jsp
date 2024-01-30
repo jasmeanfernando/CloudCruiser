@@ -56,6 +56,9 @@
 				if (ticketEmail != null && ticketID != null) {
 					reservation.cancelReservation(ticketEmail, ticketID);
 				}
+				
+				out.print("<p class=\"cc_paragraph\">Reservation successful!</p>");
+				out.println("<a class=\"cc_button\" href=\"PortalPassenger.jsp\">Home</a>");
 			}
 			catch (SQLException e) {
 				out.print("<p class=\"cc_paragraph\">Reservation action failed. Please try again.</p>");

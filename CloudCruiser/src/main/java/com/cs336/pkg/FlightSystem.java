@@ -63,7 +63,7 @@ public class FlightSystem
 		// Create query.
 		String query = "";
 		if (airportAction.equalsIgnoreCase("addAirport")) {
-			query = "INSERT INTO Airport (AirportID, AirportName, City, State, Country)";
+			query = "INSERT INTO Airport (AirportID, AirportName, City, State, Country) VALUES (?, ?, ?, ?, ?)";
 		}
 		else {
 			query = "DELETE FROM Airport WHERE AirportID = ? AND AirportName = ? AND City = ? AND State = ? AND Country = ?";
