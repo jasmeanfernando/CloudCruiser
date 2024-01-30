@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="com.cs336.pkg.*" %>
 <!--Import some libraries that have classes that we need -->
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
@@ -9,64 +9,73 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-			<title>AdminPortal</title>
+		<title>AdminPortal</title>
+		<!-- Google Fonts -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico|Poppins">
+		<!-- CloudCruiser CSS -->
+		<link rel="stylesheet" href="/CloudCruiser/resources/css/cloudcruiser.css">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	</head>
 	
 	<body>
-<!-- Admin must be logged in to access this page. -->
-<% if (session.getAttribute("user") == null) { %>
-	You are not logged in!
-	<br>
-	<a href="LoginPortal.jsp">Please login.</a>
-<% } else { %>
-	<h1>Generate revenue reports!</h1>
-	<h2>Revenue Report By Month</h2>
-	<form method="get" action="RevenueByMonth.jsp">
-		<table>
-			<tr>
-			<td>Month (YYYY-MM): </td><td><input type="text" name="month_num"></td></tr>
-		</table>
-		<input type="submit" value="Submit">
-	</form>
+	<!-- Admin must be logged in to access this page. -->
+	<%
+	if (session.getAttribute("user") == null) {
+		out.println("<p class=\"cc_paragraph\">You are not logged in! Please login.</p>");
+		out.println("<a class=\"cc_button\" href=\"PortalLogin.jsp\">Log In</a>");
+	}
+	else {
+	%>
+		<div class="container mt-1">
+		
+		<!-- Logo -->
+		<div class="text-center mb-4">
+		<img src="/CloudCruiser/resources/assets/logo.jpg" alt="Logo"
+		class="img-fluid rounded" style="max-width: 25%;">
+		</div>
+		
+		<!-- Revenue Report -->
+		<p class="cc_heading">Revenue Report</p>
+		<p class="cc_paragraph">Generate a revenue report by one of the following filters: Month, flight, airline, or customer.</p>
+		<form class="row g-3 align-items-center cc_form" method="get" action="AdminEditRevenueReports.jsp">
+			<div class="col">
+			
+			<div class="mb-3">
+				<label class="form-label">Month By Year:</label>
+				<input type="text" class="form-control" name="monthbyYearRevenue" id="monthbyYearRevenue" placeholder="YYYY-MM">
+			</div>
+			
+			<div class="mb-3">
+				<label class="form-label">Flight ID:</label>
+				<input type="text" class="form-control" name="flightRevenue" id="flightRevenue" placeholder="0">
+			</div>
+			
+			<div class="mb-3">
+				<label class="form-label">Airline:</label>
+				<input type="text" class="form-control" name="airlineRevenue" id="airlineRevenue" placeholder="AB">
+			</div>
+			
+			<div class="mb-3">
+				<label class="form-label">Email:</label>
+				<input type="text" class="form-control" name="customerRevenue" id="customerRevenue" placeholder="name@email.com">
+			</div>
+			
+			<div class="mb-3">
+				<button type="submit" class="cc_button">Generate</button>
+			</div>
+			
+			</div>
+		</form>
+		
+		</div>
 	
-	<h2>Revenue Report by Flight</h2>
-	<form method="get" action="RevenueByFlight.jsp">
-		<table>
-			<tr>
-			<td>Flight: </td><td><input type="text" name="flight_num"></td></tr>
-		</table>
-		<input type="submit" value="Submit">
-	</form>
-	
-	<h2>Revenue Report By Airline</h2>
-	<form method="get" action="RevenueByAirline.jsp">
-		<table>
-			<tr>
-			<td>Airline: </td><td><input type="text" name="airline_num"></td></tr>
-		</table>
-		<input type="submit" value="Submit">
-	</form>
-	
-	<h2>Revenue Report By Customer</h2>
-	<form method="get" action="RevenueByCustomer.jsp">
-		<table>
-			<tr>
-			<td>Customer: </td><td><input type="text" name="email"></td></tr>
-		</table>
-		<input type="submit" value="Submit">
-	</form>
-	
-	<h2>Sort By Most Active...</h2>
-	<form method="get" action="RevenueSort.jsp">
-		<table>
-			<tr>
-			<td><input type="radio" name="sortby" value="Passenger" required> Passenger</td><tr>
-			<td><input type="radio" name="sortby" value="Flight" required> Flight</td><tr>
-		</table>
-		<input type="submit" value="Submit">
-	</form>
-	<p><a href="AdminPortal.jsp">Back to Home</a></p>
-	<p><a href="Logout.jsp">Log Out</a></p>
-<% } %>
+	<!-- Close the else statement. -->
+	<% } %>
+	<!-- Bootstrap JS and Popper.js -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<!-- Bootstrap JavaScript -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	</body>
 </html>
